@@ -123,20 +123,9 @@ Add a transition or animation to your `animationClass`:
   opacity: 1;
   transform: translateY(0);
 }
-
-/* Optional stagger container layout */
-.awv-stagger-container {
-  display: flex;
-  gap: 10px;
-}
-.stagger-item {
-  width: 50px;
-  height: 50px;
-  background-color: #4caf50;
-}
 ```
 
-- **Stagger delays are applied dynamically via JS**, so you don’t need to write CSS for each element.
+- **Stagger delays are applied dynamically via JS as transition delays**, so you don’t need to write CSS for each element.
 
 ---
 
