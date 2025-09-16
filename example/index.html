@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animate When Visible Example</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Animate When Visible Example</h1>
+    <p>Scroll down to see the elements animate in.</p>
+
+    <div class="awv-animate"></div>
+    <div class="awv-animate"></div>
+    <div class="awv-animate"></div>
+    <div class="awv-animate"></div>
+    <div class="awv-animate"></div>
+
+    <h2>Staggered Row</h2>
+    <div class="stagger-row awv-stagger-container">
+      <div class="stagger-item awv-animate awv-stagger"></div>
+      <div class="stagger-item awv-animate awv-stagger"></div>
+      <div class="stagger-item awv-animate awv-stagger"></div>
+      <div class="stagger-item awv-animate awv-stagger"></div>
+      <div class="stagger-item awv-animate awv-stagger"></div>
+    </div>
+
+    <h2>Slow Staggered Row</h2>
+    <div class="stagger-row awv-stagger-container">
+      <div class="stagger-item awv-animate awv-stagger-slow"></div>
+      <div class="stagger-item awv-animate awv-stagger-slow"></div>
+      <div class="stagger-item awv-animate awv-stagger-slow"></div>
+      <div class="stagger-item awv-animate awv-stagger-slow"></div>
+      <div class="stagger-item awv-animate awv-stagger-slow"></div>
+    </div>
+
+    <h2>Mutation Observer Example</h2>
+    <button id="add-items">Add New Row</button>
+
+    <div id="new-items-container"></div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

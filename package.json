@@ -1,0 +1,42 @@
+{
+  "name": "animate-when-visible",
+  "version": "1.0.0",
+  "description": "A no-dependency JS library that adds classes to elements as they enter the viewport for CSS animations.",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.js",
+  "unpkg": "dist/index.js",
+  "scripts": {
+    "start": "es-dev-server --node-resolve --root-dir . --open example/index.html",
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mikewalker24/animateWhenVisible.git"
+  },
+  "types": "index.d.ts",
+  "homepage": "https://github.com/Mikewalker24/animateWhenVisible#readme",
+  "bugs": {
+    "url": "https://github.com/Mikewalker24/animateWhenVisible/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "animation",
+    "intersection observer",
+    "scroll",
+    "stagger",
+    "css"
+  ],
+  "author": "Mike Walker",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "es-dev-server": "^2.1.0",
+    "rollup": "^2.79.2"
+  }
+}

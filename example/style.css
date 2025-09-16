@@ -1,0 +1,55 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.my-element {
+  width: 100px;
+  height: 100px;
+  background-color: rebeccapurple;
+  margin: 100px auto;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.my-element.awv-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+h2 {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.stagger-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-block: 20px;
+}
+
+.stagger-item {
+  width: 50px;
+  height: 50px;
+  background-color: #9966cc;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stagger-item.awv-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item.awv-stagger-slow {
+  background-color: #330066;
+}
