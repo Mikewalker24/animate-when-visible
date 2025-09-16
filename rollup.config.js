@@ -4,21 +4,14 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      file: 'dist/index.mjs', // ES module
+      file: 'dist/index.js', // ESM build
       format: 'es',
       sourcemap: true,
-    },
-    {
-      file: 'dist/index.js', // UMD for browsers
-      format: 'umd',
-      name: 'animateWhenVisible',
-      sourcemap: true,
-      exports: 'default',
     },
   ],
   plugins: [
     terser({
-      keep_fnames: true,
+      keep_fnames: true, // preserves function names for easier debugging
     }),
   ],
 };

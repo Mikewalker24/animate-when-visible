@@ -2,9 +2,9 @@
   "name": "animate-when-visible",
   "version": "1.0.0",
   "description": "A no-dependency JS library that adds classes to elements as they enter the viewport for CSS animations.",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
+  "main": "dist/index.js",
   "browser": "dist/index.js",
-  "unpkg": "dist/index.js",
   "scripts": {
     "start": "es-dev-server --node-resolve --root-dir . --open example/index.html",
     "build": "rollup -c",
