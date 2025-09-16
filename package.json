@@ -8,7 +8,8 @@
   "scripts": {
     "start": "es-dev-server --node-resolve --root-dir . --open example/index.html",
     "build": "rollup -c",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:example": "npm run build && mkdir -p example/lib && cp -r dist/* example/lib"
   },
   "repository": {
     "type": "git",
