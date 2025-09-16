@@ -2,9 +2,6 @@ import animateWhenVisible from './lib/index.js';
 
 // Initialize the animator
 const animator = animateWhenVisible({
-  threshold: 0.2,
-  staggerDelay: 100,
-  staggerDelaySlow: 300,
   observeMutations: true,
   onVisible: (el) => {
     console.log('Animated:', el);
