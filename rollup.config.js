@@ -13,6 +13,7 @@ export default {
       format: 'umd',
       name: 'animateWhenVisible',
       sourcemap: true,
+      exports: 'default',
     },
   ],
   plugins: [
