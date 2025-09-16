@@ -39,5 +39,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "es-dev-server": "^2.1.0",
     "rollup": "^2.79.2"
-  }
+  },
+  "prepublishOnly": "npm run build"
 }
