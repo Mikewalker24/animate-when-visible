@@ -26,7 +26,7 @@ export default function animateWhenVisible(options = {}) {
     targetSelector: '.awv-animate',
     staggerContainerSelector: '.awv-stagger-container',
     onVisible: null,
-    observeMutations: true,
+    observeMutations: false,
     animateOnScrollDownOnly: false,
     ...options,
   };
