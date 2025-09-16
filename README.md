@@ -138,4 +138,6 @@ Add a transition or animation to your `animationClass`:
 
 ## Example
 
+Example: https://animate-when-visible-example.netlify.app/
+
 See the `example` directory for a working demo with staggered and slow-staggered animations.
