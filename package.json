@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mikewalker24/animateWhenVisible.git"
+    "url": "https://github.com/Mikewalker24/animate-when-visible.git"
   },
   "types": "index.d.ts",
-  "homepage": "https://github.com/Mikewalker24/animateWhenVisible#readme",
+  "homepage": "https://github.com/Mikewalker24/animate-when-visible#readme",
   "bugs": {
-    "url": "https://github.com/Mikewalker24/animateWhenVisible/issues"
+    "url": "https://github.com/Mikewalker24/animate-when-visible/issues"
   },
   "files": [
     "dist",
