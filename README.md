@@ -1,5 +1,9 @@
 # Animate When Visible
 
+![npm](https://img.shields.io/npm/v/animate-when-visible)
+![downloads](https://img.shields.io/npm/dm/animate-when-visible)
+![license](https://img.shields.io/npm/l/animate-when-visible)
+
 A tiny (2KB), no-dependency JavaScript library that adds classes to elements when they become visible, letting you control animations with CSS.
 
 There are no default animations included. The library performs two main tasks:
