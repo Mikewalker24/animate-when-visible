@@ -1,4 +1,4 @@
-import animateWhenVisible from '../src/index.js';
+import animateWhenVisible from '../dist/index.mjs';
 
 // Initialize the animator
 const animator = animateWhenVisible({
