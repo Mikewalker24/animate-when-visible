@@ -57,7 +57,7 @@ import animateWhenVisible from 'animate-when-visible';
 ### 2. Initialize
 
 ```javascript
-const animator = animateWhenVisible();
+animateWhenVisible();
 ```
 
 By default, all elements with the .awv-animate class will have the configured animationClass added when they become visible.
@@ -103,11 +103,15 @@ const animator = animateWhenVisible({
 ### 4. Destroy / Refresh
 
 ```javascript
+import { destroy, refresh } from 'animate-when-visible';
+```
+
+```javascript
 // Stop observers
-animator.destroy();
+destroy();
 
 // Re-observe elements
-animator.refresh();
+refresh();
 ```
 
 ---
