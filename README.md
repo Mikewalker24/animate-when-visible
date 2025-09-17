@@ -4,14 +4,37 @@
 ![downloads](https://img.shields.io/npm/dm/animate-when-visible)
 ![license](https://img.shields.io/npm/l/animate-when-visible)
 
-A tiny (2KB), no-dependency JavaScript library that adds classes to elements when they become visible, letting you control animations with CSS.
+A tiny (2KB), no-dependency JavaScript library that adds a class to elements when they become visible, letting you control animations with CSS. Optionally, automatically add staggered timing between elements.
 
-There are no default animations included. The library performs two main tasks:
+There are no default animations included, you define them yourself in CSS.
 
-- Adds a class to elements when they become visible.
-- Dynamically applies transition delays to elements marked for staggered animations.
+Example: https://animate-when-visible-example.netlify.app/
 
-This approach gives you full control to define your own CSS animations. It supports staggered and slow-staggered elements, optional scroll-direction triggers, and dynamically added content.
+## Features
+
+- Adds a class to elements when they enter the viewport
+- Supports **staggered** and **slow-staggered** animations with automatic transition delays
+- Includes sorting logic so that staggered animations fire based on their order in the DOM
+- Optionally handles **dynamically added content** via MutationObserver
+- Provides an optional callback function for each intersection
+- Provides lifecycle methods: `destroy()` and `refresh()`
+- Lightweight, no dependencies
+
+## Why another scroll animation library?
+
+Because I couldn't find what I wanted in the existing options.
+
+Most existing animation libraries are either:
+
+- **Heavy**: They add a lot of extra JavaScript and CSS that aren’t necessary for simple visibility-triggered animations.
+- **Outdated**: Many are based on scroll listeners, which can be detrimental to peformance. This library uses **IntersectionObserver** and **requestAnimationFrame** to ensure light and performant effects.
+- **Opinionated**: They come bundled with animations that don't fit your design, and often look clunky.
+
+`animate-when-visible`:
+
+- Provides the **essential logic** for visibility detection and staggered timing.
+- Leaves the animation as part of the CSS presentation layer.
+- Makes staggered animations dead simple with built-in delay handling.
 
 ---
 
@@ -43,7 +66,7 @@ By default, all elements with the .awv-animate class will have the configured an
 
 ### 3. Options
 
-You can pass an options object to customize behavior:
+You can pass an options object:
 
 ```javascript
 const animator = animateWhenVisible({
@@ -56,7 +79,7 @@ const animator = animateWhenVisible({
   targetSelector: '.awv-animate',
   staggerContainerSelector: '.awv-stagger-container',
   onVisible: null,
-  observeMutations: true,
+  observeMutations: false,
   animateOnScrollDownOnly: false,
 });
 ```
@@ -72,7 +95,7 @@ const animator = animateWhenVisible({
 | `targetSelector`           | String   | `'.awv-animate'`           | CSS selector for elements to animate         |
 | `staggerContainerSelector` | String   | `'.awv-stagger-container'` | Selector for staggered element containers    |
 | `onVisible`                | Function | `null`                     | Callback called when element becomes visible |
-| `observeMutations`         | Boolean  | `true`                     | Observe dynamically added elements           |
+| `observeMutations`         | Boolean  | `false`                    | Observe dynamically added elements           |
 | `animateOnScrollDownOnly`  | Boolean  | `false`                    | Only animate when scrolling down             |
 
 ---
@@ -83,7 +106,7 @@ const animator = animateWhenVisible({
 // Stop observers
 animator.destroy();
 
-// Re-observe elements (useful after dynamically adding content)
+// Re-observe elements
 animator.refresh();
 ```
 
@@ -101,13 +124,13 @@ animator.refresh();
 
 ```html
 <div class="awv-stagger-container">
-  <div class="awv-animate awv-stagger"></div>
-  <div class="awv-animate awv-stagger-slow"></div>
-  <div class="awv-animate awv-stagger"></div>
+  <div class="awv-animate awv-stagger fade-in"></div>
+  <div class="awv-animate awv-stagger fade-in"></div>
+  <div class="awv-animate awv-stagger fade-in"></div>
 </div>
 ```
 
-- `.awv-stagger-container` is optional if you don’t need staggered delays.
+- `.awv-stagger-container` groups a set of staggered elements together. This prevents long delays when many elements appear on the screen at once.
 - `.awv-stagger` and `.awv-stagger-slow` control the stagger timing.
 
 ---
@@ -117,15 +140,26 @@ animator.refresh();
 Add a transition or animation to your `animationClass`:
 
 ```css
-.awv-animate {
+/* Fade in + slide up */
+.fade-in {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.awv-animate.awv-visible {
+.fade-in.awv-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Simple opacity fade */
+.fade-in-opacity {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.fade-in-opacity.awv-visible {
+  opacity: 1;
 }
 ```
 
@@ -141,7 +175,5 @@ Add a transition or animation to your `animationClass`:
 ---
 
 ## Example
-
-Example: https://animate-when-visible-example.netlify.app/
 
 See the `example` directory for a working demo with staggered and slow-staggered animations.
