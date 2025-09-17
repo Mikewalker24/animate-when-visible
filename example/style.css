@@ -1,7 +1,8 @@
+
 .awv-animate {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .awv-visible {
@@ -12,14 +13,21 @@
 /* Example styles */
 
 body {
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 50px 20px;
   text-align: center;
+  background-color: #f0f2f5;
+  color: #333;
 }
 
 h1 {
   text-align: center;
+  color: #1a1a1a;
+}
+
+h2 {
+    color: #4a4a4a;
 }
 
 .item {
@@ -27,6 +35,8 @@ h1 {
   height: 100px;
   background-color: rebeccapurple;
   margin: 100px auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .stagger-row {
@@ -40,8 +50,30 @@ h1 {
   width: 50px;
   height: 50px;
   background-color: #9966cc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .stagger-item.awv-stagger-slow {
   background-color: #330066;
+}
+
+#new-items-container {
+  padding-block: 20px;
+}
+
+#add-items {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007aff;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+#add-items:hover {
+  background-color: #005ecb;
 }
