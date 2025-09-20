@@ -16,13 +16,13 @@ const newItemsContainer = document.getElementById('new-items-container');
 
 function createStaggerItem() {
   const item = document.createElement('div');
-  item.className = 'stagger-item awv-animate awv-stagger';
+  item.className = 'small-item fade-in awv-animate awv-stagger';
   return item;
 }
 
 function createStaggerRow(count = 5) {
   const row = document.createElement('div');
-  row.className = 'stagger-row awv-stagger-container';
+  row.className = 'row awv-stagger-container';
   for (let i = 0; i < count; i++) {
     row.appendChild(createStaggerItem());
   }

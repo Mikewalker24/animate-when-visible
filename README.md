@@ -4,7 +4,7 @@
 ![downloads](https://img.shields.io/npm/dm/animate-when-visible)
 ![license](https://img.shields.io/npm/l/animate-when-visible)
 
-A tiny (2KB), no-dependency JavaScript library that adds a class to elements when they become visible, letting you control animations with CSS. Optionally, automatically add staggered timing between elements.
+A tiny (2KB), no-dependency JavaScript module that adds a class to elements when they become visible, letting you control animations with CSS. Optionally, automatically add staggered timing between elements.
 
 There are no default animations included, you define them yourself in CSS.
 
@@ -13,26 +13,26 @@ Example: https://animate-when-visible-example.netlify.app/
 ## Features
 
 - Adds a class to elements when they enter the viewport
-- Supports **staggered** and **slow-staggered** animations with automatic transition delays
-- Includes sorting logic so that staggered animations fire based on their order in the DOM
-- Optionally handles **dynamically added content** via MutationObserver
+- Supports staggered animations with automatic transition delays
+- Includes sorting logic so that elements fire based on their order in the DOM
+- Optionally handles dynamically added content via `MutationObserver`
 - Provides an optional callback function for each intersection
 - Provides lifecycle methods: `destroy()` and `refresh()`
 - Lightweight, no dependencies
 
-## Why another scroll animation library?
+## Why another scroll animation module?
 
 Because I couldn't find what I wanted in the existing options.
 
-Most existing animation libraries are either:
+Most existing scroll animation libraries are either:
 
-- **Heavy**: They add a lot of extra JavaScript and CSS that aren’t necessary for simple visibility-triggered animations.
-- **Outdated**: Many are based on scroll listeners, which can be detrimental to peformance. This library uses **IntersectionObserver** and **requestAnimationFrame** to ensure light and performant effects.
-- **Opinionated**: They come bundled with animations that don't fit your design, and often look clunky.
+- Heavy: They add a lot of extra JavaScript and CSS that aren’t necessary for simple visibility-triggered animations.
+- Outdated: Many are based on scroll listeners, which can be detrimental to peformance. This module uses `IntersectionObserver` and `requestAnimationFrame` to ensure light and performant effects.
+- Opinionated: They come bundled with animations that you would never use.
 
-`animate-when-visible`:
+This module:
 
-- Provides the **essential logic** for visibility detection and staggered timing.
+- Provides the essential logic for visibility detection.
 - Leaves the animation as part of the CSS presentation layer.
 - Makes staggered animations dead simple with built-in delay handling.
 
@@ -48,7 +48,7 @@ npm install animate-when-visible
 
 ## Usage
 
-### 1. Import the library
+### 1. Import the module
 
 ```javascript
 import animateWhenVisible from 'animate-when-visible';
@@ -144,10 +144,10 @@ refresh();
 Add a transition or animation to your `animationClass`:
 
 ```css
-/* Fade in + slide up */
+/* Fade in & slide up */
 .fade-in {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(10px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
@@ -167,17 +167,17 @@ Add a transition or animation to your `animationClass`:
 }
 ```
 
-- **Stagger delays are applied dynamically via JS as transition delays**, so you don’t need to write CSS for each element.
+- Stagger delays are applied dynamically via JS as transition delays, so you don’t need to write CSS for each element.
 
 ---
 
 ## Browser Support
 
-- Modern browsers with **IntersectionObserver support**.
+- Modern browsers with `IntersectionObserver` support.
 - Polyfills required for IE11 and older browsers.
 
 ---
 
-## Example
+## License
 
-See the `example` directory for a working demo with staggered and slow-staggered animations.
+MIT
