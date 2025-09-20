@@ -1,13 +1,14 @@
 {
   "name": "animate-when-visible",
-  "version": "1.0.5",
-  "description": "A tiny (2KB), no-dependency JavaScript library that adds classes to elements when they become visible, letting you control animations with CSS.",
-  "module": "dist/index.js",
-  "main": "dist/index.js",
-  "browser": "dist/index.js",
+  "version": "1.0.6",
+  "description": "A tiny (2KB), no-dependency JavaScript module that adds classes to elements when they become visible, letting you control animations with CSS.",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.umd.js",
+  "types": "index.d.ts",
   "scripts": {
-    "start": "es-dev-server --node-resolve --root-dir . --open example/index.html",
-    "build": "rollup -c",
+    "start": "wds --node-resolve --root-dir . --open example/index.html",
+    "build": "NODE_ENV=production rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:example": "npm run build && mkdir -p example/lib && cp -r dist/* example/lib"
   },
@@ -15,7 +16,6 @@
     "type": "git",
     "url": "https://github.com/Mikewalker24/animate-when-visible.git"
   },
-  "types": "index.d.ts",
   "homepage": "https://github.com/Mikewalker24/animate-when-visible#readme",
   "bugs": {
     "url": "https://github.com/Mikewalker24/animate-when-visible/issues"
@@ -26,19 +26,31 @@
     "LICENSE"
   ],
   "keywords": [
+    "animate",
+    "visibility",
     "animation",
-    "intersection observer",
     "scroll",
-    "stagger",
-    "css"
+    "viewport",
+    "intersection-observer",
+    "animation-classes",
+    "staggered-animation",
+    "css-animations",
+    "visible-elements"
   ],
   "author": "Mike Walker",
   "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "es-dev-server": "^2.1.0",
+    "@web/dev-server": "^0.4.6",
     "rollup": "^2.79.2"
   },
-  "prepublishOnly": "npm run build"
+  "prepublishOnly": "npm run build",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js",
+      "types": "./index.d.ts"
+    }
+  }
 }
