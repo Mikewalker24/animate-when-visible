@@ -2,48 +2,26 @@ import terser from '@rollup/plugin-terser';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const output = [
+const outputs = [
   {
-    file: 'dist/index.js',
+    file: 'dist/index.js', // unminified ES module
     format: 'es',
-    sourcemap: true,
-  },
-  {
-    file: 'dist/index.mjs',
-    format: 'es',
-    sourcemap: true,
-  },
-  {
-    name: 'animateWhenVisible',
-    file: 'dist/index.umd.js',
-    format: 'umd',
-    sourcemap: true,
+    sourcemap: false,
   },
 ];
 
-const productionOutput = [
-  {
-    file: 'dist/index.min.js',
-    format: 'es',
-    sourcemap: true,
-    plugins: [terser({ keep_fnames: true })],
-  },
-  {
-    file: 'dist/index.min.mjs',
-    format: 'es',
-    sourcemap: true,
-    plugins: [terser({ keep_fnames: true })],
-  },
-  {
-    name: 'animateWhenVisible',
-    file: 'dist/index.umd.min.js',
+if (isProduction) {
+  outputs.push({
+    file: 'dist/index.umd.min.js', // minified UMD for browsers
     format: 'umd',
-    sourcemap: true,
-    plugins: [terser({ keep_fnames: true })],
-  },
-];
+    name: 'animateWhenVisible',
+    exports: 'named', // avoids default/named export warning
+    sourcemap: false,
+    plugins: [terser()],
+  });
+}
 
 export default {
   input: 'src/index.js',
-  output: isProduction ? [...output, ...productionOutput] : output,
+  output: outputs,
 };

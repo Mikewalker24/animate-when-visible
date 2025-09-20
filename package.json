@@ -1,16 +1,16 @@
 {
   "name": "animate-when-visible",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A tiny (2KB), no-dependency JavaScript module that adds classes to elements when they become visible, letting you control animations with CSS.",
-  "main": "dist/index.umd.js",
-  "module": "dist/index.mjs",
-  "browser": "dist/index.umd.js",
+  "main": "dist/index.umd.min.js",
+  "module": "dist/index.js",
+  "browser": "dist/index.umd.min.js",
   "types": "index.d.ts",
   "scripts": {
     "start": "wds --node-resolve --root-dir . --open example/index.html",
     "build": "NODE_ENV=production rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:example": "npm run build && mkdir -p example/lib && cp -r dist/* example/lib"
+    "build:example": "npm run build && mkdir -p example/lib && cp dist/* example/lib"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,8 @@
     "url": "https://github.com/Mikewalker24/animate-when-visible/issues"
   },
   "files": [
-    "dist",
+    "dist/index.js",
+    "dist/index.umd.min.js",
     "README.md",
     "LICENSE"
   ],
@@ -39,7 +40,6 @@
   ],
   "author": "Mike Walker",
   "license": "MIT",
-  "type": "module",
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@web/dev-server": "^0.4.6",
@@ -48,8 +48,8 @@
   "prepublishOnly": "npm run build",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.umd.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.min.js",
       "types": "./index.d.ts"
     }
   }
