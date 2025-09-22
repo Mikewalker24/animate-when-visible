@@ -2,20 +2,20 @@ export default function animateWhenVisible({
   threshold = 0.1,
   staggerDelay = 100,
   staggerDelaySlow = 250,
+  targetSelector = '.awv-animate',
   animationClass = 'awv-visible',
   staggerClass = 'awv-stagger',
   staggerSlowClass = 'awv-stagger-slow',
-  targetSelector = '.awv-animate',
   staggerContainerSelector = '.awv-stagger-container',
   onVisible = null,
   observeMutations = false,
   animateOnScrollDownOnly = false,
 } = {}) {
-  // Maps target elements to their insertion order
+  // Map target elements to their insertion order
   const elementIndex = new Map();
   let orderCounter = 0;
 
-  // Tracks number of staggered elements per container
+  // Track number of staggered elements per container to calculate delays
   const staggeredCountByContainer = new Map();
 
   // Used to detect scroll direction
@@ -29,13 +29,13 @@ export default function animateWhenVisible({
     document.body;
 
   // Calculate delay based on how many elements in container have already animated
-  const getStaggerDelay = (el, container) => {
+  function getStaggerDelay(el, container) {
     const count = staggeredCountByContainer.get(container) ?? 0;
     if (el.classList.contains(staggerSlowClass))
       return `${count * staggerDelaySlow}ms`;
     if (el.classList.contains(staggerClass)) return `${count * staggerDelay}ms`;
     return '0ms';
-  };
+  }
 
   // Animate element immediately
   function animateImmediate(el) {
@@ -102,12 +102,12 @@ export default function animateWhenVisible({
   });
 
   // Observe elements and assign order index
-  const observeElements = (els) => {
+  function observeElements(els) {
     for (const el of els) {
       if (!elementIndex.has(el)) elementIndex.set(el, orderCounter++);
       observer.observe(el);
     }
-  };
+  }
 
   // Start observing initial elements
   observeElements(document.querySelectorAll(targetSelector));
@@ -117,14 +117,14 @@ export default function animateWhenVisible({
   if (observeMutations) {
     mutationObserver = new MutationObserver((mutations) => {
       const newElements = new Set();
-      for (const m of mutations) {
-        for (const n of m.addedNodes) {
-          if (n.nodeType !== 1) continue; // Only element nodes
-          if (n.matches(targetSelector)) newElements.add(n);
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== 1) continue; // Only element nodes
+          if (node.matches(targetSelector)) newElements.add(n);
           else
-            n.querySelectorAll(targetSelector).forEach((child) =>
-              newElements.add(child)
-            );
+            node
+              .querySelectorAll(targetSelector)
+              .forEach((child) => newElements.add(child));
         }
       }
       if (newElements.size) observeElements([...newElements]);

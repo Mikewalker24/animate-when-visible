@@ -1,15 +1,12 @@
-import animateWhenVisible from './lib/index.js';
+import animateWhenVisible from '../src/index.js';
 
-// Initialize the animator
-const animator = animateWhenVisible({
+animateWhenVisible({
   observeMutations: true,
   onVisible: (el) => {
-    console.log('Animated:', el);
+    // console.log('Animated:', el);
   },
 });
-
-// Optionally, stop observing when needed
-// animator.destroy();
+console.log('THI RAN');
 
 const addItemsButton = document.getElementById('add-items');
 const newItemsContainer = document.getElementById('new-items-container');
