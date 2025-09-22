@@ -1,173 +1,145 @@
-/**
- * animateWhenVisible
- * Adds a class to elements when they enter the viewport, with optional stagger and scroll-direction support.
- *
- * @param {Object} options Configuration options
- * @param {number} options.threshold IntersectionObserver threshold
- * @param {number} options.staggerDelay Delay in ms for staggered elements
- * @param {number} options.staggerDelaySlow Delay in ms for slow staggered elements
- * @param {string} options.animationClass Class to add when visible
- * @param {string} options.staggerClass Class that marks elements to stagger
- * @param {string} options.staggerSlowClass Class that marks elements for slow stagger
- * @param {string} options.targetSelector CSS selector for target elements
- * @param {string} options.staggerContainerSelector Class or selector for stagger containers
- * @param {Function} options.onVisible Callback function called when element becomes visible
- * @param {boolean} options.observeMutations Whether to observe dynamically added elements
- * @param {boolean} options.animateOnScrollDownOnly Only animate when scrolling down
- */
+export default function animateWhenVisible({
+  threshold = 0.1,
+  staggerDelay = 100,
+  staggerDelaySlow = 250,
+  animationClass = 'awv-visible',
+  staggerClass = 'awv-stagger',
+  staggerSlowClass = 'awv-stagger-slow',
+  targetSelector = '.awv-animate',
+  staggerContainerSelector = '.awv-stagger-container',
+  onVisible = null,
+  observeMutations = false,
+  animateOnScrollDownOnly = false,
+} = {}) {
+  // Maps target elements to their insertion order
+  const elementIndex = new Map();
+  let orderCounter = 0;
 
-let currentObserver;
-let currentMutationObserver;
-let currentCfg;
-let elementIndex = new Map();
-let orderCounter = 0;
-let staggeredCountByContainer = new Map();
-let lastScrollY = window.scrollY;
+  // Tracks number of staggered elements per container
+  const staggeredCountByContainer = new Map();
 
-function handleIntersect(entries) {
-  const currentScrollY = window.scrollY;
-  const scrollingDown = currentScrollY > lastScrollY;
-  lastScrollY = currentScrollY;
+  // Used to detect scroll direction
+  let lastScrollY = window.scrollY;
 
-  entries
-    .filter((e) => e.isIntersecting)
-    .sort((a, b) => elementIndex.get(a.target) - elementIndex.get(b.target))
-    .forEach((entry) => {
-      if (currentCfg.animateOnScrollDownOnly && !scrollingDown) return;
-
-      const el = entry.target;
-      const hasStagger =
-        el.classList.contains(currentCfg.staggerClass) ||
-        el.classList.contains(currentCfg.staggerSlowClass);
-
-      if (!hasStagger) {
-        animateImmediate(el);
-        return;
-      }
-
-      const container = getStaggerContainer(el);
-      animateWithStagger(el, container);
-    });
-}
-
-function observeElements(els) {
-  els.forEach((el) => {
-    if (!elementIndex.has(el)) elementIndex.set(el, orderCounter++);
-    currentObserver.observe(el);
-  });
-}
-
-function getStaggerContainer(el) {
-  return (
-    el.closest(currentCfg.staggerContainerSelector) ||
+  // Get the nearest container for staggering, or fallback to common parent elements
+  const getStaggerContainer = (el) =>
+    el.closest(staggerContainerSelector) ||
     el.closest('section') ||
     el.closest('nav') ||
-    document.body
-  );
-}
+    document.body;
 
-function getStaggerDelay(el, container) {
-  const animatedCount = staggeredCountByContainer.get(container) ?? 0;
+  // Calculate delay based on how many elements in container have already animated
+  const getStaggerDelay = (el, container) => {
+    const count = staggeredCountByContainer.get(container) ?? 0;
+    if (el.classList.contains(staggerSlowClass))
+      return `${count * staggerDelaySlow}ms`;
+    if (el.classList.contains(staggerClass)) return `${count * staggerDelay}ms`;
+    return '0ms';
+  };
 
-  if (el.classList.contains(currentCfg.staggerSlowClass)) {
-    return `${animatedCount * currentCfg.staggerDelaySlow}ms`;
-  }
-  if (el.classList.contains(currentCfg.staggerClass)) {
-    return `${animatedCount * currentCfg.staggerDelay}ms`;
-  }
-  return '0ms';
-}
-
-function animateImmediate(el) {
-  el.classList.add(currentCfg.animationClass);
-  if (typeof currentCfg.onVisible === 'function') currentCfg.onVisible(el);
-  currentObserver.unobserve(el);
-}
-
-function animateWithStagger(el, container) {
-  if (!staggeredCountByContainer.has(container)) {
-    staggeredCountByContainer.set(container, 0);
+  // Animate element immediately
+  function animateImmediate(el) {
+    el.classList.add(animationClass);
+    onVisible?.(el);
+    observer.unobserve(el);
   }
 
-  const delay = getStaggerDelay(el, container);
+  // Animate element with staggered delay
+  function animateWithStagger(el, container) {
+    if (!staggeredCountByContainer.has(container))
+      staggeredCountByContainer.set(container, 0);
 
-  requestAnimationFrame(() => {
+    const delay = getStaggerDelay(el, container);
     el.style.transitionDelay = delay;
-    el.classList.add(currentCfg.animationClass);
+    el.classList.add(animationClass);
 
+    // Reset delay after transition ends
     el.addEventListener(
       'transitionend',
-      () => (el.style.transitionDelay = '0ms'),
+      () => {
+        el.style.transitionDelay = '0ms';
+      },
       { once: true }
     );
 
-    if (typeof currentCfg.onVisible === 'function') currentCfg.onVisible(el);
+    onVisible?.(el);
+
+    // Increment count for container
+    staggeredCountByContainer.set(
+      container,
+      staggeredCountByContainer.get(container) + 1
+    );
+
+    observer.unobserve(el);
+  }
+
+  // IntersectionObserver callback
+  function handleIntersect(entries) {
+    const currentScrollY = window.scrollY;
+    const scrollingDown = currentScrollY > lastScrollY;
+    lastScrollY = currentScrollY;
+
+    entries
+      .filter((e) => e.isIntersecting) // Only handle visible elements
+      .sort((a, b) => elementIndex.get(a.target) - elementIndex.get(b.target)) // Maintain insertion order
+      .forEach((entry) => {
+        if (animateOnScrollDownOnly && !scrollingDown) return;
+
+        const el = entry.target;
+        const isStaggered =
+          el.classList.contains(staggerClass) ||
+          el.classList.contains(staggerSlowClass);
+        if (!isStaggered) return animateImmediate(el);
+
+        const container = getStaggerContainer(el);
+        animateWithStagger(el, container);
+      });
+  }
+
+  // Create observer
+  const observer = new IntersectionObserver(handleIntersect, {
+    threshold,
   });
 
-  staggeredCountByContainer.set(
-    container,
-    staggeredCountByContainer.get(container) + 1
-  );
-  currentObserver.unobserve(el);
-}
-
-export default function animateWhenVisible(options = {}) {
-  currentCfg = {
-    threshold: 0.1,
-    staggerDelay: 100,
-    staggerDelaySlow: 250,
-    animationClass: 'awv-visible',
-    staggerClass: 'awv-stagger',
-    staggerSlowClass: 'awv-stagger-slow',
-    targetSelector: '.awv-animate',
-    staggerContainerSelector: '.awv-stagger-container',
-    onVisible: null,
-    observeMutations: false,
-    animateOnScrollDownOnly: false,
-    ...options,
+  // Observe elements and assign order index
+  const observeElements = (els) => {
+    for (const el of els) {
+      if (!elementIndex.has(el)) elementIndex.set(el, orderCounter++);
+      observer.observe(el);
+    }
   };
 
-  elementIndex = new Map();
-  orderCounter = 0;
-  staggeredCountByContainer = new Map();
-  lastScrollY = window.scrollY;
+  // Start observing initial elements
+  observeElements(document.querySelectorAll(targetSelector));
 
-  currentObserver = new IntersectionObserver(handleIntersect, {
-    threshold: currentCfg.threshold,
-  });
-
-  observeElements(document.querySelectorAll(currentCfg.targetSelector));
-
-  if (currentCfg.observeMutations) {
-    currentMutationObserver = new MutationObserver(function handleMutations(
-      mutations
-    ) {
-      const newEls = new Set();
-      mutations.forEach((m) =>
-        m.addedNodes.forEach((n) => {
-          if (n.nodeType !== 1) return;
-          if (n.matches(currentCfg.targetSelector)) newEls.add(n);
+  // Optionally observe dynamically added elements
+  let mutationObserver;
+  if (observeMutations) {
+    mutationObserver = new MutationObserver((mutations) => {
+      const newElements = new Set();
+      for (const m of mutations) {
+        for (const n of m.addedNodes) {
+          if (n.nodeType !== 1) continue; // Only element nodes
+          if (n.matches(targetSelector)) newElements.add(n);
           else
-            n.querySelectorAll(currentCfg.targetSelector).forEach((child) =>
-              newEls.add(child)
+            n.querySelectorAll(targetSelector).forEach((child) =>
+              newElements.add(child)
             );
-        })
-      );
-      if (newEls.size) observeElements([...newEls]);
+        }
+      }
+      if (newElements.size) observeElements([...newElements]);
     });
-    currentMutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
   }
-}
 
-export function destroy() {
-  if (currentObserver) currentObserver.disconnect();
-  if (currentMutationObserver) currentMutationObserver.disconnect();
-}
-
-export function refresh() {
-  if (currentObserver)
-    observeElements(document.querySelectorAll(currentCfg.targetSelector));
+  // Return API to destroy observers or refresh element list
+  return {
+    destroy: () => {
+      observer.disconnect();
+      mutationObserver?.disconnect();
+    },
+    refresh: () => {
+      observeElements(document.querySelectorAll(targetSelector));
+    },
+  };
 }
