@@ -33,7 +33,8 @@ export default function animateWhenVisible({
     const count = staggeredCountByContainer.get(container) ?? 0;
     if (el.classList.contains(staggerSlowClass))
       return `${count * staggerDelaySlow}ms`;
-    if (el.classList.contains(staggerClass)) return `${count * staggerDelay}ms`;
+    if (el.classList.contains(staggerClass))
+      return `${count * staggerDelay}ms`;
     return '0ms';
   }
 
@@ -46,8 +47,11 @@ export default function animateWhenVisible({
 
   // Animate element with staggered delay
   function animateWithStagger(el, container) {
-    if (!staggeredCountByContainer.has(container))
-      staggeredCountByContainer.set(container, 0);
+    // Seed the counter with how many are already visible in this container
+    if (!staggeredCountByContainer.has(container)) {
+      const alreadyVisible = container.querySelectorAll(`.${animationClass}`).length;
+      staggeredCountByContainer.set(container, alreadyVisible);
+    }
 
     const delay = getStaggerDelay(el, container);
     el.style.transitionDelay = delay;
@@ -120,7 +124,7 @@ export default function animateWhenVisible({
       for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
           if (node.nodeType !== 1) continue; // Only element nodes
-          if (node.matches(targetSelector)) newElements.add(n);
+          if (node.matches(targetSelector)) newElements.add(node);
           else
             node
               .querySelectorAll(targetSelector)
@@ -132,6 +136,15 @@ export default function animateWhenVisible({
     mutationObserver.observe(document.body, { childList: true, subtree: true });
   }
 
+  // Reset counts by seeding from already-visible elements in each container
+  function reseedStaggerCounts() {
+    staggeredCountByContainer.clear();
+    document.querySelectorAll(staggerContainerSelector).forEach((container) => {
+      const alreadyVisible = container.querySelectorAll(`.${animationClass}`).length;
+      staggeredCountByContainer.set(container, alreadyVisible);
+    });
+  }
+
   // Return API to destroy observers or refresh element list
   return {
     destroy: () => {
@@ -139,6 +152,7 @@ export default function animateWhenVisible({
       mutationObserver?.disconnect();
     },
     refresh: () => {
+      reseedStaggerCounts();
       observeElements(document.querySelectorAll(targetSelector));
     },
   };
