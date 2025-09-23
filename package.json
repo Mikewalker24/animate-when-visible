@@ -1,6 +1,6 @@
 {
   "name": "animate-when-visible",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A tiny (2KB), no-dependency JavaScript module that adds classes to elements when they become visible, letting you control animations with CSS.",
   "main": "dist/index.umd.min.js",
   "module": "dist/index.js",
